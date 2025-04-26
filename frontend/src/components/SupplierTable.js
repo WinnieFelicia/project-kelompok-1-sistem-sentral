@@ -1,27 +1,37 @@
-import React from 'react';
-import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import { Table, Thead, Tbody, Tr, Th, Td, Button } from '@chakra-ui/react';
 
-export default function SupplierTable({ suppliers }) {
+const SupplierTable = ({ suppliers, onEdit, onDelete }) => {
   return (
-    <Table variant="simple" bg="white" shadow="md" borderRadius="md">
-      <Thead bg="red.500">
+    <Table variant="simple">
+      <Thead>
         <Tr>
-          <Th color="white">ID</Th>
-          <Th color="white">Nama</Th>
-          <Th color="white">Kontak</Th>
-          <Th color="white">Alamat</Th>
+          <Th>ID Supplier</Th>
+          <Th>Nama Supplier</Th>
+          <Th>Nomor Kontak</Th>
+          <Th>Alamat</Th>
+          <Th>Aksi</Th>
         </Tr>
       </Thead>
       <Tbody>
-        {suppliers.map((supplier, index) => (
-          <Tr key={index}>
+        {suppliers.map((supplier) => (
+          <Tr key={supplier._id}>
             <Td>{supplier.supplierId}</Td>
-            <Td>{supplier.name}</Td>
-            <Td>{supplier.contact}</Td>
+            <Td>{supplier.supplierName}</Td>
+            <Td>{supplier.contactNumber}</Td>
             <Td>{supplier.address}</Td>
+            <Td>
+              <Button size="sm" colorScheme="blue" mr={2} onClick={() => onEdit(supplier)}>
+                Edit
+              </Button>
+              <Button size="sm" colorScheme="red" onClick={() => onDelete(supplier._id)}>
+                Delete
+              </Button>
+            </Td>
           </Tr>
         ))}
       </Tbody>
     </Table>
   );
-}
+};
+
+export default SupplierTable;

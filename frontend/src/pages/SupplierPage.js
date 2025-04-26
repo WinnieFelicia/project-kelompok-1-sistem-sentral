@@ -1,57 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import { Flex, Box, useToast } from '@chakra-ui/react';
-import Sidebar from '../components/Sidebar';
-import Header from '../components/Header';
-import AddSupplierForm from '../components/AddSupplierForm';
+import { useEffect, useState } from 'react';
+import { Box, Button, Heading } from '@chakra-ui/react';
 import SupplierTable from '../components/SupplierTable';
-import axios from 'axios';
+import SupplierForm from '../components/SupplierForm';
+import { getSuppliers, addSupplier, updateSupplier, deleteSupplier } from '../services/supplierService';
 
-export default function SupplierPage() {
-  const toast = useToast();
+const SupplierPage = () => {
   const [suppliers, setSuppliers] = useState([]);
-  const [supplier, setSupplier] = useState({
-    supplierId: '',
-    name: '',
-    contact: '',
-    address: '',
-  });
+  const [isOpen, setIsOpen] = useState(false);
+  const [editingSupplier, setEditingSupplier] = useState(null);
 
   const fetchSuppliers = async () => {
-    try {
-      const res = await axios.get('http://localhost:5000/api/suppliers');
-      setSuppliers(res.data);
-    } catch (error) {
-      console.error(error);
-    }
+    const res = await getSuppliers();
+    setSuppliers(res.data);
   };
 
   useEffect(() => {
     fetchSuppliers();
   }, []);
 
-  const handleChange = (e) => {
-    setSupplier({ ...supplier, [e.target.name]: e.target.value });
+  const handleAdd = () => {
+    setEditingSupplier(null);
+    setIsOpen(true);
   };
 
-  const handleAdd = async () => {
-    try {
-      await axios.post('http://localhost:5000/api/suppliers', supplier);
-      toast({ title: 'Supplier added', status: 'success', duration: 2000, isClosable: true });
-      setSupplier({ supplierId: '', name: '', contact: '', address: '' });
-      fetchSuppliers();
-    } catch (error) {
-      toast({ title: 'Error adding supplier', status: 'error', duration: 2000, isClosable: true });
+  const handleEdit = (supplier) => {
+    setEditingSupplier(supplier);
+    setIsOpen(true);
+  };
+
+  const handleDelete = async (id) => {
+    await deleteSupplier(id);
+    fetchSuppliers();
+  };
+
+  const handleSubmit = async (supplier) => {
+    if (editingSupplier) {
+      await updateSupplier(editingSupplier._id, supplier);
+    } else {
+      await addSupplier(supplier);
     }
+    fetchSuppliers();
   };
 
   return (
-    <Flex minH="100vh" bg="#FFF7F6">
-      <Sidebar />
-      <Box flex={1} p={10}>
-        <Header />
-        <AddSupplierForm supplier={supplier} handleChange={handleChange} handleAdd={handleAdd} />
-        <SupplierTable suppliers={suppliers} />
-      </Box>
-    </Flex>
+    <Box p={5}>
+      <Heading mb={4}>Data Supplier</Heading>
+      <Button colorScheme="orange" mb={4} onClick={handleAdd}>
+        Tambah Supplier
+      </Button>
+      <SupplierTable suppliers={suppliers} onEdit={handleEdit} onDelete={handleDelete} />
+      <SupplierForm isOpen={isOpen} onClose={() => setIsOpen(false)} onSubmit={handleSubmit} initialData={editingSupplier} />
+    </Box>
   );
-}
+};
+
+export default SupplierPage;

@@ -1,18 +1,39 @@
-const Supplier = require('../models/supplierModel');
+const Supplier = require('../models/Supplier');
 
-exports.getAllSuppliers = async (req, res) => {
-  const suppliers = await Supplier.find();
-  res.json(suppliers);
+exports.getSuppliers = async (req, res) => {
+  try {
+    const suppliers = await Supplier.find();
+    res.json(suppliers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-exports.createSupplier = async (req, res) => {
-  const { supplierId, name, contact, address } = req.body;
-  const newSupplier = new Supplier({ supplierId, name, contact, address });
-  await newSupplier.save();
-  res.status(201).json(newSupplier);
+exports.addSupplier = async (req, res) => {
+  const { supplierId, supplierName, contactNumber, address } = req.body;
+  try {
+    const newSupplier = new Supplier({ supplierId, supplierName, contactNumber, address });
+    await newSupplier.save();
+    res.status(201).json(newSupplier);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.updateSupplier = async (req, res) => {
+  try {
+    const supplier = await Supplier.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(supplier);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 exports.deleteSupplier = async (req, res) => {
-  await Supplier.findByIdAndDelete(req.params.id);
-  res.status(200).json({ message: 'Supplier deleted' });
+  try {
+    await Supplier.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Supplier deleted' });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };

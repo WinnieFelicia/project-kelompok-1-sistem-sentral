@@ -1,25 +1,41 @@
-import React from 'react';
-import { Box, Heading, VStack, Flex, Icon, Spacer } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-import { FiHome, FiBox, FiBarChart2, FiUser, FiFileText, FiSettings, FiLogOut } from 'react-icons/fi';
+import { Box, VStack, Link, Text } from '@chakra-ui/react';
+import { NavLink } from 'react-router-dom';
 
-export default function Sidebar() {
+const Sidebar = () => {
+  const navItems = [
+    { name: 'Inventory', path: '/inventory' },
+    { name: 'Supplier', path: '/supplier' },
+  ];
+
   return (
-    <Box w="250px" bg="white" p={5} shadow="md">
-      <Heading size="md" color="red.600" mb={10}>Sental Data</Heading>
-      <VStack align="start" spacing={5} fontSize="md">
-        <Link to="/"><Flex align="center" gap={3}><Icon as={FiHome} /> Dashboard</Flex></Link>
-        <Link to="/inventory"><Flex align="center" gap={3}><Icon as={FiBox} /> Inventory</Flex></Link>
-        <Link to="/reports"><Flex align="center" gap={3}><Icon as={FiBarChart2} /> Reports</Flex></Link>
-        <Link to="/suppliers"><Flex align="center" gap={3}><Icon as={FiUser} /> Suppliers</Flex></Link>
-        <Link to="/orders"><Flex align="center" gap={3}><Icon as={FiFileText} /> Orders</Flex></Link>
-        <Link to="/store"><Flex align="center" gap={3}><Icon as={FiFileText} /> Manage Store</Flex></Link>
-      </VStack>
-      <Spacer my={10} />
-      <VStack align="start" spacing={5}>
-        <Link to="/settings"><Flex align="center" gap={3}><Icon as={FiSettings} /> Settings</Flex></Link>
-        <Link to="/logout"><Flex align="center" gap={3}><Icon as={FiLogOut} /> Log Out</Flex></Link>
+    <Box
+      w="250px"
+      bg="primary"  // Warna utama merah
+      color="white"
+      h="100vh"
+      position="fixed"
+      p={5}
+    >
+      <Text fontSize="2xl" mb={10} fontWeight="bold">
+        Sentral Data
+      </Text>
+      <VStack spacing={4} align="stretch">
+        {navItems.map((item) => (
+          <Link
+            as={NavLink}
+            to={item.path}
+            key={item.name}
+            _hover={{ textDecoration: 'none', bg: 'accent' }} // Warna biru terang pas hover
+            p={2}
+            borderRadius="md"
+            _activeLink={{ bg: 'secondary' }}  // Warna biru tua pas aktif
+          >
+            {item.name}
+          </Link>
+        ))}
       </VStack>
     </Box>
   );
-}
+};
+
+export default Sidebar;
