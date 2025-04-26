@@ -1,11 +1,25 @@
-import { Box, VStack, Link, Text } from '@chakra-ui/react';
-import { NavLink } from 'react-router-dom';
+import { Box, VStack, Link, Text, Button } from '@chakra-ui/react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
   const navItems = [
     { name: 'Inventory', path: '/inventory' },
     { name: 'Supplier', path: '/supplier' },
   ];
+
+  // Fungsi untuk Logout
+  const handleLogout = () => {
+    // Hapus data auth dari localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    delete axios.defaults.headers.common['Authorization'];
+
+    // Redirect ke halaman login
+    navigate('/login', { replace: true });
+  };
 
   return (
     <Box
@@ -34,6 +48,17 @@ const Sidebar = () => {
           </Link>
         ))}
       </VStack>
+
+      {/* Tombol Logout */}
+      <Button
+        mt="auto"
+        colorScheme="red"
+        variant="solid"
+        onClick={handleLogout}
+        w="full"
+      >
+        Logout
+      </Button>
     </Box>
   );
 };
