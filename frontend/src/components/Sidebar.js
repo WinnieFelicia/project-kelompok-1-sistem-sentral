@@ -8,6 +8,7 @@ const Sidebar = () => {
   const navItems = [
     { name: 'Inventory', path: '/inventory' },
     { name: 'Supplier', path: '/supplier' },
+    { name: 'Order', path: '/order' },
   ];
 
   // Fungsi untuk Logout

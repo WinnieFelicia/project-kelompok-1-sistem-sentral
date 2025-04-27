@@ -13,6 +13,7 @@ import RegisterPage from './pages/RegisterPage';
 import LogoutPage from './pages/LogoutPage';
 import InventoryPage from './pages/InventoryPage';
 import SupplierPage from './pages/SupplierPage';
+import OrderPage from './pages/OrderPage';
 
 function AppLayout() {
   return (
@@ -55,6 +56,7 @@ export default function App() {
             <Route index element={<Navigate to="/inventory" replace />} />
             <Route path="inventory" element={<InventoryPage />} />
             <Route path="supplier" element={<SupplierPage />} />
+            <Route path="order" element={<OrderPage />} />
           </Route>
 
           {/* Fallback */}
