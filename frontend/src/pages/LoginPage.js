@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import {
   VStack,
-  HStack,        // ← tambahkan
+  HStack,
   Box,
   Input,
   Button,
@@ -48,7 +48,9 @@ export default function LoginPage() {
         duration: 2000,
         isClosable: true,
       });
-      navigate('/inventory');
+
+      // ➡️ Ubah tujuan setelah login ke /dashboard
+      navigate('/dashboard');
     } catch (err) {
       toast({
         title: err.response?.data?.message || 'Login gagal',
@@ -90,7 +92,7 @@ export default function LoginPage() {
           Login
         </Button>
 
-        <HStack>  {/* sekarang HStack sudah ter-import */}
+        <HStack>
           <Text fontSize="sm" color="gray.600">
             Belum punya akun?
           </Text>

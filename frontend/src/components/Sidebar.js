@@ -1,4 +1,4 @@
-import { Box, VStack, Link, Text, Button } from '@chakra-ui/react';
+import { Box, VStack, Text, Button } from '@chakra-ui/react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -15,48 +15,50 @@ const Sidebar = () => {
 
   // Fungsi untuk Logout
   const handleLogout = () => {
-    // Hapus data auth dari localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     delete axios.defaults.headers.common['Authorization'];
 
-    // Redirect ke halaman login
     navigate('/login', { replace: true });
   };
 
   return (
     <Box
       w="250px"
-      bg="primary"  // Warna utama merah
+      bg="primary" // Warna utama
       color="white"
       h="100vh"
       position="fixed"
       p={5}
+      display="flex"
+      flexDirection="column"
     >
       <Text fontSize="2xl" mb={10} fontWeight="bold">
         Sentral Data
       </Text>
-      <VStack spacing={4} align="stretch">
+
+      <VStack spacing={4} align="stretch" flex="1">
         {navItems.map((item) => (
-          <Link
-            as={NavLink}
+          <NavLink
             to={item.path}
             key={item.name}
-            _hover={{ textDecoration: 'none', bg: 'accent' }} // Warna biru terang pas hover
-            p={2}
-            borderRadius="md"
-            _activeLink={{ bg: 'secondary' }}  // Warna biru tua pas aktif
+            style={({ isActive }) => ({
+              padding: '8px 12px',
+              borderRadius: '8px',
+              backgroundColor: isActive ? '#1A202C' : 'transparent', // aktif = dark
+              textDecoration: 'none',
+              color: 'white',
+            })}
           >
             {item.name}
-          </Link>
+          </NavLink>
         ))}
       </VStack>
 
-      {/* Tombol Logout */}
+      {/* Tombol Logout di bawah */}
       <Button
-        mt="auto"
         colorScheme="red"
-        variant="solid"
+        mt={4}
         onClick={handleLogout}
         w="full"
       >

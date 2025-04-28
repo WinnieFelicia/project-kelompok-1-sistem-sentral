@@ -14,6 +14,8 @@ import InventoryPage from './pages/InventoryPage';
 import SupplierPage from './pages/SupplierPage';
 import OrderPage from './pages/OrderPage';
 import ReportPage from './pages/ReportPage'; 
+import DashboardPage from './pages/DashboardPage';
+
 
 function AppLayout() {
   return (
@@ -52,6 +54,7 @@ export default function App() {
             }
           >
             <Route index element={<Navigate to="/dashboard" replace />} />
+            <Route path="dashboard" element={<DashboardPage />} />
             <Route path="inventory" element={<InventoryPage />} />
             <Route path="supplier" element={<SupplierPage />} />
             <Route path="order" element={<OrderPage />} />
