@@ -1,6 +1,6 @@
 import { Table, Thead, Tbody, Tr, Th, Td, Button, HStack } from '@chakra-ui/react';
 
-const OrderTable = ({ orders, onEdit, onDelete }) => {
+const OrderTable = ({ orders = [], onEdit, onDelete }) => {
   return (
     <Table variant="simple" mt={5}>
       <Thead>
@@ -13,35 +13,26 @@ const OrderTable = ({ orders, onEdit, onDelete }) => {
           <Th>Harga</Th>
           <Th>Total</Th>
           <Th>Pembayaran</Th>
+          <Th>Aksi</Th>
         </Tr>
       </Thead>
       <Tbody>
-        {orders.map((item) => (
-          <Tr key={item._orderID}>
-            <Td>{item.orderID}</Td>
-            <Td>{item.date}</Td>
-            <Td>{item.supplier}</Td>
-            <Td>{item.product}</Td>
-            <Td>{item.quantity}</Td>
-            <Td>{item.price}</Td>
-            <Td>{item.total}</Td>
-            <Td>{item.payment}</Td>
+        {orders.map((order) => (
+          <Tr key={order._id}>
+            <Td>{order.orderID}</Td>
+            <Td>{order.date}</Td>
+            <Td>{order.supplier}</Td>
+            <Td>{order.product}</Td>
+            <Td>{order.quantity}</Td>
+            <Td>{order.price}</Td>
+            <Td>{order.total}</Td>
+            <Td>{order.payment}</Td>
             <Td>
               <HStack>
-                <Button
-                  size="sm"
-                  colorScheme="yellow"
-                  onClick={() => onEdit(item)}
-                  _hover={{ bg: 'accent' }}
-                >
+                <Button size="sm" colorScheme="yellow" onClick={() => onEdit(order)}>
                   Edit
                 </Button>
-                <Button
-                  size="sm"
-                  colorScheme="red"
-                  onClick={() => onDelete(item._id)}
-                  _hover={{ bg: 'secondary' }}
-                >
+                <Button size="sm" colorScheme="red" onClick={() => onDelete(order._id)}>
                   Delete
                 </Button>
               </HStack>

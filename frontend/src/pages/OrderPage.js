@@ -1,58 +1,67 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getOrders, addOrder, updateOrder, deleteOrder } from '../services/orderService';
 import OrderForm from '../components/orderForm';
 import OrderTable from '../components/orderTable';
-import { Box, Heading, useToast } from '@chakra-ui/react';
 
 const OrderPage = () => {
   const [orders, setOrders] = useState([]);
   const [editingOrder, setEditingOrder] = useState(null);
-  const toast = useToast();
+
+  const fetchOrders = async () => {
+    try {
+      const response = await getOrders();
+      setOrders(response.data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  };
 
   useEffect(() => {
     fetchOrders();
   }, []);
 
-  const fetchOrders = async () => {
-    const data = await getOrders();
-    setOrders(data);
+  const handleAdd = async (newOrder) => {
+    try {
+      await addOrder(newOrder);
+      fetchOrders();
+    } catch (error) {
+      console.error('Error adding order:', error);
+    }
   };
 
-  const handleAddOrder = async (order) => {
-    await addOrder(order);
-    fetchOrders();
-    toast({ title: 'Order added!', status: 'success', duration: 2000, isClosable: true });
+  const handleUpdate = async (id, updatedOrder) => {
+    try {
+      await updateOrder(id, updatedOrder);
+      fetchOrders();
+      setEditingOrder(null);
+    } catch (error) {
+      console.error('Error updating order:', error);
+    }
   };
 
-  const handleUpdateOrder = async (id, order) => {
-    await updateOrder(id, order);
-    fetchOrders();
-    toast({ title: 'Order updated!', status: 'success', duration: 2000, isClosable: true });
-  };
-
-  const handleDeleteOrder = async (id) => {
-    if (window.confirm('Are you sure want to delete this item?')) {
+  const handleDelete = async (id) => {
+    try {
       await deleteOrder(id);
       fetchOrders();
-      toast({ title: 'Order deleted!', status: 'error', duration: 2000, isClosable: true });
+    } catch (error) {
+      console.error('Error deleting order:', error);
     }
   };
 
   return (
-    <Box p={5}>
-      <Heading mb={5}>Order - Data Pesanan</Heading>
-      <OrderForm
-        onAdd={handleAddOrder}
-        onUpdate={handleUpdateOrder}
-        editingInventory={editingOrder}
+    <div>
+      <OrderForm 
+        onAdd={handleAdd}
+        onUpdate={handleUpdate}
+        editingOrder={editingOrder}
         clearEdit={() => setEditingOrder(null)}
       />
-      <OrderTable
+      <OrderTable 
         orders={orders}
         onEdit={setEditingOrder}
-        onDelete={handleDeleteOrder}
+        onDelete={handleDelete}
       />
-    </Box>
+    </div>
   );
 };
 

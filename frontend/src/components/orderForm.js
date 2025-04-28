@@ -8,13 +8,13 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [formData, setFormData] = useState({
     orderID: '',
-    Tanggal: '',
-    Supplier: '',
-    Produk: '',
-    Kuantitas: '',
-    Harga: '',
-    Total: '',
-    Pembayaran: ''
+    date: '',
+    supplier: '',
+    product: '',
+    quantity: '',
+    price: '',
+    total: '',
+    payment: ''
   });
 
   useEffect(() => {
@@ -25,24 +25,46 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
   }, [editingOrder, onOpen]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleSubmit = () => {
     if (editingOrder) {
       onUpdate(editingOrder._id, formData);
-      clearEdit();
     } else {
       onAdd(formData);
     }
-    setFormData({ orderID: '', Tanggal: '', Supplier: '', Produk: '', Kuantitas: '', Harga: '', Total: '', Pembayaran: '' });
+    setFormData({
+      orderID: '',
+      date: '',
+      supplier: '',
+      product: '',
+      quantity: '',
+      price: '',
+      total: '',
+      payment: ''
+    });
     onClose();
+    clearEdit();
   };
 
   const handleClose = () => {
-    clearEdit();
-    setFormData({ orderID: '', Tanggal: '', Supplier: '', Produk: '', Kuantitas: '', Harga: '', Total: '', Pembayaran: '' });
+    setFormData({
+      orderID: '',
+      date: '',
+      supplier: '',
+      product: '',
+      quantity: '',
+      price: '',
+      total: '',
+      payment: ''
+    });
     onClose();
+    clearEdit();
   };
 
   return (
@@ -52,18 +74,18 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
       <Modal isOpen={isOpen} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{editingOrder ? 'Edit order' : 'Add Order'}</ModalHeader>
+          <ModalHeader>{editingOrder ? 'Edit Order' : 'Add Order'}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {['orderID', 'Tanggal', 'Supplier', 'Produk', 'Kuantitas', 'Harga', 'Total', 'Pembayaran'].map((field) => (
+            {Object.keys(formData).map((field) => (
               <FormControl key={field} mb={3}>
-                <FormLabel>{field.replace(/([A-Z])/g, ' $1')}</FormLabel>
+                <FormLabel>{field.charAt(0).toUpperCase() + field.slice(1)}</FormLabel>
                 <Input name={field} value={formData[field]} onChange={handleChange} />
               </FormControl>
             ))}
           </ModalBody>
           <ModalFooter>
-            <Button onClick={handleSubmit} colorScheme="teal" mr={3}>
+            <Button colorScheme="teal" mr={3} onClick={handleSubmit}>
               {editingOrder ? 'Update' : 'Add'}
             </Button>
             <Button onClick={handleClose}>Cancel</Button>

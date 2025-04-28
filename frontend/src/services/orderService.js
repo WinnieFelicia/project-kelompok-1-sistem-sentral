@@ -1,23 +1,6 @@
 import axios from 'axios';
-
-const API_URL = 'http://localhost:5000/api/inventory';
-
-export const getOrders = async () => {
-  const res = await axios.get(API_URL);
-  return res.data;
-};
-
-export const addOrder = async (data) => {
-  const res = await axios.post(API_URL, data);
-  return res.data;
-};
-
-export const updateOrder = async (id, data) => {
-  const res = await axios.put(`${API_URL}/${id}`, data);
-  return res.data;
-};
-
-export const deleteOrder = async (id) => {
-  const res = await axios.delete(`${API_URL}/${id}`);
-  return res.data;
-};
+const API_URL = 'http://localhost:5000/api/orders';
+export const getOrders = () => axios.get(API_URL);
+export const addOrder = (orderData) => axios.post(API_URL, orderData);
+export const updateOrder = (id, orderData) => axios.put(`${API_URL}/${id}`, orderData);
+export const deleteOrder = (id) => axios.delete(`${API_URL}/${id}`);
