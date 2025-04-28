@@ -6,6 +6,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const navItems = [
+    { name: 'Dashboard', path: '/dashboard' },
     { name: 'Inventory', path: '/inventory' },
     { name: 'Supplier', path: '/supplier' },
     { name: 'Order', path: '/order' },
