@@ -13,7 +13,7 @@ import LogoutPage from './pages/LogoutPage';
 import InventoryPage from './pages/InventoryPage';
 import SupplierPage from './pages/SupplierPage';
 import OrderPage from './pages/OrderPage';
-import LaporanPage from './pages/LaporanPage';  // <- ubah nama file jadi LaporanPage.js biar konsisten
+import ReportPage from './pages/ReportPage'; 
 
 function AppLayout() {
   return (
@@ -55,7 +55,7 @@ export default function App() {
             <Route path="inventory" element={<InventoryPage />} />
             <Route path="supplier" element={<SupplierPage />} />
             <Route path="order" element={<OrderPage />} />
-            <Route path="laporan" element={<LaporanPage />} /> {/* <-- Tambahkan ini */}
+            <Route path="laporan" element={<ReportPage />} /> 
           </Route>
 
           {/* Fallback */}

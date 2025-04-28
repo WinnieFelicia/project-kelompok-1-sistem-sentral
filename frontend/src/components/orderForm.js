@@ -34,25 +34,22 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
 
   const handleSubmit = () => {
     if (editingOrder) {
-      onUpdate(editingOrder._id, formData);
+      onUpdate(editingOrder._id, formData); // Update existing order
     } else {
-      onAdd(formData);
+      onAdd(formData); // Add new order
     }
-    setFormData({
-      orderID: '',
-      date: '',
-      supplier: '',
-      product: '',
-      quantity: '',
-      price: '',
-      total: '',
-      payment: ''
-    });
+    resetForm();
     onClose();
     clearEdit();
   };
 
   const handleClose = () => {
+    resetForm();
+    onClose();
+    clearEdit();
+  };
+
+  const resetForm = () => {
     setFormData({
       orderID: '',
       date: '',
@@ -63,8 +60,6 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
       total: '',
       payment: ''
     });
-    onClose();
-    clearEdit();
   };
 
   return (
@@ -80,7 +75,12 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
             {Object.keys(formData).map((field) => (
               <FormControl key={field} mb={3}>
                 <FormLabel>{field.charAt(0).toUpperCase() + field.slice(1)}</FormLabel>
-                <Input name={field} value={formData[field]} onChange={handleChange} />
+                <Input
+                  type={field === 'date' ? 'date' : 'text'} // Handle date field type
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleChange}
+                />
               </FormControl>
             ))}
           </ModalBody>

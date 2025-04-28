@@ -22,3 +22,26 @@ exports.deleteOrder = async (req, res) => {
   await Order.findByIdAndDelete(id);
   res.json({ message: 'Order deleted' });
 };
+
+// 🚀 Tambahan baru untuk laporan berdasarkan tanggal
+exports.getReport = async (req, res) => {
+  try {
+    const { start, end } = req.query;
+
+    if (!start || !end) {
+      return res.status(400).json({ message: 'Start and end dates are required' });
+    }
+
+    const orders = await Order.find({
+      date: {
+        $gte: new Date(start),
+        $lte: new Date(end),
+      },
+    }).sort({ date: 1 });
+
+    res.json(orders);
+  } catch (error) {
+    console.error('Error generating report:', error);
+    res.status(500).json({ message: 'Failed to fetch report' });
+  }
+};

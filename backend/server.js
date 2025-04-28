@@ -22,7 +22,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/suppliers', supplierRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/reports', reportRoutes);
+app.use('/api', reportRoutes);
 
 // DB Connection
 mongoose.connect(process.env.MONGODB_URI, {
