@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth');
 const supplierRoutes = require('./routes/supplierRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
 
@@ -15,11 +16,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/suppliers', supplierRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/reports', reportRoutes);
 
 // DB Connection
 mongoose.connect(process.env.MONGODB_URI, {

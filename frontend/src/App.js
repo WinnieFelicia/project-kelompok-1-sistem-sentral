@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { ChakraProvider, Box } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
@@ -14,6 +13,7 @@ import LogoutPage from './pages/LogoutPage';
 import InventoryPage from './pages/InventoryPage';
 import SupplierPage from './pages/SupplierPage';
 import OrderPage from './pages/OrderPage';
+import LaporanPage from './pages/LaporanPage';  // <- ubah nama file jadi LaporanPage.js biar konsisten
 
 function AppLayout() {
   return (
@@ -40,8 +40,6 @@ export default function App() {
           {/* Public */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-
-          {/* Logout route (optional) */}
           <Route path="/logout" element={<LogoutPage />} />
 
           {/* Protected */}
@@ -57,6 +55,7 @@ export default function App() {
             <Route path="inventory" element={<InventoryPage />} />
             <Route path="supplier" element={<SupplierPage />} />
             <Route path="order" element={<OrderPage />} />
+            <Route path="laporan" element={<LaporanPage />} /> {/* <-- Tambahkan ini */}
           </Route>
 
           {/* Fallback */}

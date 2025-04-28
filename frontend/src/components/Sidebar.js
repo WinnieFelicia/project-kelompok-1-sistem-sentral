@@ -9,6 +9,7 @@ const Sidebar = () => {
     { name: 'Inventory', path: '/inventory' },
     { name: 'Supplier', path: '/supplier' },
     { name: 'Order', path: '/order' },
+    { name: 'Laporan', path: '/laporan' },
   ];
 
   // Fungsi untuk Logout
