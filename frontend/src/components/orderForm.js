@@ -24,22 +24,34 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
       setFormData(editingOrder);
       onOpen();
     }
-
+  }, [editingOrder]);
+  
+  useEffect(() => {
     const fetchSuppliers = async () => {
-      const response = await fetch('/api/suppliers');
-      const data = await response.json();
-      setSuppliers(data);
+      try {
+        const response = await fetch('http://localhost:5000/api/suppliers');
+        const data = await response.json();
+        setSuppliers(data);
+      } catch (error) {
+        console.error('Error fetching suppliers:', error);
+      }
     };
-
+  
     const fetchInventories = async () => {
-      const response = await fetch('/api/inventory'); 
-      const data = await response.json();
-      setInventories(data);
+      try {
+        const response = await fetch('http://localhost:5000/api/inventory');
+        const data = await response.json();
+        setInventories(data);
+      } catch (error) {
+        console.error('Error fetching inventories:', error);
+      }
     };
-
+  
     fetchSuppliers();
     fetchInventories();
-  }, [editingOrder, onOpen]);
+  }, []);
+  
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,17 +107,18 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
                   <FormControl key={field} mb={3}>
                     <FormLabel>Supplier</FormLabel>
                     <Select
-                      name={field}
-                      value={formData[field]}
+                      name="supplier"
+                      value={formData.supplier} // Pastikan formData.supplier berisi _id supplier
                       onChange={handleChange}
                     >
                       <option value="">Select Supplier</option>
                       {suppliers.map(supplier => (
-                        <option key={supplier._id} value={supplier.namaSupplier}>
+                        <option key={supplier._id} value={supplier._id}> {/* Ubah ke _id */}
                           {supplier.namaSupplier}
                         </option>
                       ))}
                     </Select>
+
                   </FormControl>
                 );
               }
