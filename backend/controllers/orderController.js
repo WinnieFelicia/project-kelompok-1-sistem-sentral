@@ -1,8 +1,12 @@
 const Order = require('../models/Order');
 
 exports.getOrders = async (req, res) => {
-  const orders = await Order.find();
-  res.json(orders);
+  try {
+    const orders = await Order.find();
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.createOrder = async (req, res) => {

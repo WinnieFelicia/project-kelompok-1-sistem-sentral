@@ -108,16 +108,18 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
                     <FormLabel>Supplier</FormLabel>
                     <Select
                       name="supplier"
-                      value={formData.supplier} // Pastikan formData.supplier berisi _id supplier
+                      value={formData.supplier}
                       onChange={handleChange}
+                      color="black" // untuk memastikan teks terlihat
                     >
                       <option value="">Select Supplier</option>
                       {suppliers.map(supplier => (
-                        <option key={supplier._id} value={supplier._id}> {/* Ubah ke _id */}
-                          {supplier.namaSupplier}
+                        <option key={supplier._id} value={supplier._id}>
+                          {supplier.supplierName}
                         </option>
                       ))}
                     </Select>
+
 
                   </FormControl>
                 );
