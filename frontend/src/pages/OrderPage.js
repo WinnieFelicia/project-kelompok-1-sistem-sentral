@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Heading, HStack, Select, useToast } from '@chakra-ui/react';
+import { Box, Heading, HStack, Select, useToast, useDisclosure } from '@chakra-ui/react';
 import { getOrders, addOrder, updateOrder, deleteOrder } from '../services/orderService';
 import OrderForm from '../components/orderForm';
 import OrderTable from '../components/orderTable';
@@ -8,6 +8,7 @@ const OrderPage = () => {
   const [filteredOrders, setFilteredOrders] = useState([]); 
   const [editingOrder, setEditingOrder] = useState(null);
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     fetchOrders();
@@ -55,6 +56,11 @@ const OrderPage = () => {
     }
   };
 
+  const handleEdit = (order) => {
+    setEditingOrder(order);
+    onOpen();
+  };
+
   const handleSortProduct = (order) => {
     let sorted = [...filteredOrders];
     if (order === 'asc') {
@@ -71,6 +77,9 @@ const OrderPage = () => {
 
       <HStack justifyContent="space-between" mb={5}>
         <OrderForm
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
           onAdd={handleAddOrder}
           onUpdate={handleUpdateOrder}
           editingOrder={editingOrder}
@@ -88,7 +97,7 @@ const OrderPage = () => {
 
       <OrderTable
         orders={filteredOrders}
-        onEdit={setEditingOrder}
+        onEdit={handleEdit}
         onDelete={handleDeleteOrder}
       />
     </Box>

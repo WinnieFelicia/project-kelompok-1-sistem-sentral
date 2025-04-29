@@ -1,20 +1,19 @@
-// models/Order.js
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  orderId: String,
-  tanggal: Date,
+  orderID: String,
+  date: Date,
   supplier: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Supplier',
     required: true
   },
   
-  produk: String,
-  kuantitas: Number,
-  harga: Number,
+  product: String,
+  quantity: Number,
+  price: Number,
   total: Number,
-  pembayaran: String
+  payment: String
 });
 
 module.exports = mongoose.model('Order', orderSchema);

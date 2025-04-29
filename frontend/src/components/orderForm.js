@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import {
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton,
-  ModalBody, ModalFooter, Button, FormControl, FormLabel, Input, Select, useDisclosure
+  ModalBody, ModalFooter, Button, FormControl, FormLabel, Input, Select
 } from '@chakra-ui/react';
 
-const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const OrderForm = ({ isOpen, onOpen, onClose, onAdd, onUpdate, editingOrder, clearEdit }) => {
   const [formData, setFormData] = useState({
     orderID: '',
     date: '',
@@ -16,16 +15,18 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
     total: '',
     payment: ''
   });
+
   const [suppliers, setSuppliers] = useState([]);
   const [inventories, setInventories] = useState([]);
 
   useEffect(() => {
     if (editingOrder) {
       setFormData(editingOrder);
-      onOpen();
+    } else {
+      resetForm();
     }
   }, [editingOrder]);
-  
+
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
@@ -36,7 +37,7 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
         console.error('Error fetching suppliers:', error);
       }
     };
-  
+
     const fetchInventories = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/inventory');
@@ -46,12 +47,10 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
         console.error('Error fetching inventories:', error);
       }
     };
-  
+
     fetchSuppliers();
     fetchInventories();
   }, []);
-  
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,12 +71,6 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
     clearEdit();
   };
 
-  const handleClose = () => {
-    resetForm();
-    onClose();
-    clearEdit();
-  };
-
   const resetForm = () => {
     setFormData({
       orderID: '',
@@ -89,6 +82,12 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
       total: '',
       payment: ''
     });
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+    clearEdit();
   };
 
   return (
@@ -110,7 +109,7 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
                       name="supplier"
                       value={formData.supplier}
                       onChange={handleChange}
-                      color="black" // untuk memastikan teks terlihat
+                      color="black"
                     >
                       <option value="">Select Supplier</option>
                       {suppliers.map(supplier => (
@@ -119,8 +118,6 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
                         </option>
                       ))}
                     </Select>
-
-
                   </FormControl>
                 );
               }
