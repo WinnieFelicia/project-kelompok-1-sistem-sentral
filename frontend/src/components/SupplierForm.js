@@ -10,17 +10,19 @@ const SupplierForm = ({ isOpen, onClose, onSubmit, initialData }) => {
   });
 
   useEffect(() => {
-    if (initialData) {
-      setSupplier(initialData);
-    } else {
-      setSupplier({
-        supplierId: '',
-        supplierName: '',
-        contactNumber: '',
-        address: '',
-      });
+    if (isOpen) {
+      if (initialData) {
+        setSupplier(initialData);
+      } else {
+        setSupplier({
+          supplierId: '',
+          supplierName: '',
+          contactNumber: '',
+          address: '',
+        });
+      }
     }
-  }, [initialData]);
+  }, [isOpen, initialData]);
 
   const handleChange = (e) => {
     setSupplier({ ...supplier, [e.target.name]: e.target.value });
@@ -28,7 +30,7 @@ const SupplierForm = ({ isOpen, onClose, onSubmit, initialData }) => {
 
   const handleSubmit = () => {
     onSubmit(supplier);
-    onClose();
+    onClose(); // Tutup modal setelah submit
   };
 
   return (

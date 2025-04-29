@@ -61,7 +61,7 @@ const InventoryPage = () => {
         />
 
         <Select
-          placeholder="Filter"
+          placeholder="Filter Inventory"
           maxW="200px"
           onChange={(e) => handleSortProduct(e.target.value)}
         >

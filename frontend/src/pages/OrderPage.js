@@ -77,7 +77,7 @@ const OrderPage = () => {
           clearEdit={() => setEditingOrder(null)}
         />
         <Select
-          placeholder="Filter Nama Produk"
+          placeholder="Filter Order"
           maxW="200px"
           onChange={(e) => handleSortProduct(e.target.value)}
         >
