@@ -32,7 +32,7 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
     };
 
     const fetchInventories = async () => {
-      const response = await fetch('/api/inventory'); // pastikan endpoint ini ada
+      const response = await fetch('/api/inventory'); 
       const data = await response.json();
       setInventories(data);
     };
@@ -101,8 +101,8 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
                     >
                       <option value="">Select Supplier</option>
                       {suppliers.map(supplier => (
-                        <option key={supplier._id} value={supplier.supplierName}>
-                          {supplier.supplierName}
+                        <option key={supplier._id} value={supplier.namaSupplier}>
+                          {supplier.namaSupplier}
                         </option>
                       ))}
                     </Select>
@@ -121,8 +121,8 @@ const OrderForm = ({ onAdd, onUpdate, editingOrder, clearEdit }) => {
                     >
                       <option value="">Select Product</option>
                       {inventories.map(product => (
-                        <option key={product._id} value={product.productName}>
-                          {product.productName}
+                        <option key={product._id} value={product.namaProduk}>
+                          {product.namaProduk}
                         </option>
                       ))}
                     </Select>

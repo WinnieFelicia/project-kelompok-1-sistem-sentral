@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { getInventories, addInventory, updateInventory, deleteInventory } from '../services/inventoryService';
 import InventoryTable from '../components/InventoryTable';
 import InventoryForm from '../components/InventoryForm';
-import { Box, Heading, useToast } from '@chakra-ui/react';
+import { Box, Heading, HStack, Select, useToast } from '@chakra-ui/react';
 
 const InventoryPage = () => {
-  const [inventories, setInventories] = useState([]);
+  const [filteredInventories, setFilteredInventories] = useState([]);
   const [editingInventory, setEditingInventory] = useState(null);
   const toast = useToast();
 
@@ -15,7 +15,7 @@ const InventoryPage = () => {
 
   const fetchInventories = async () => {
     const data = await getInventories();
-    setInventories(data);
+    setFilteredInventories(data);
   };
 
   const handleAddInventory = async (inventory) => {
@@ -38,17 +38,40 @@ const InventoryPage = () => {
     }
   };
 
+  const handleSortProduct = (order) => {
+    let sorted = [...filteredInventories];
+    if (order === 'asc') {
+      sorted.sort((a, b) => a.namaProduk.localeCompare(b.namaProduk));
+    } else if (order === 'desc') {
+      sorted.sort((a, b) => b.namaProduk.localeCompare(a.namaProduk));
+    }
+    setFilteredInventories(sorted);
+  };
+
   return (
     <Box p={5}>
       <Heading mb={5}>Inventory - Data Produk</Heading>
-      <InventoryForm
-        onAdd={handleAddInventory}
-        onUpdate={handleUpdateInventory}
-        editingInventory={editingInventory}
-        clearEdit={() => setEditingInventory(null)}
-      />
+
+      <HStack justifyContent="space-between" mb={5}>
+        <InventoryForm
+          onAdd={handleAddInventory}
+          onUpdate={handleUpdateInventory}
+          editingInventory={editingInventory}
+          clearEdit={() => setEditingInventory(null)}
+        />
+
+        <Select
+          placeholder="Filter"
+          maxW="200px"
+          onChange={(e) => handleSortProduct(e.target.value)}
+        >
+          <option value="asc">A - Z Produk</option>
+          <option value="desc">Z - A Produk</option>
+        </Select>
+      </HStack>
+
       <InventoryTable
-        inventories={inventories}
+        inventories={filteredInventories}
         onEdit={setEditingInventory}
         onDelete={handleDeleteInventory}
       />

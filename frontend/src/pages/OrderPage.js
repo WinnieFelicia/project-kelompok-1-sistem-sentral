@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Box, Heading, useToast } from '@chakra-ui/react';
+import { Box, Heading, HStack, Select, useToast } from '@chakra-ui/react';
 import { getOrders, addOrder, updateOrder, deleteOrder } from '../services/orderService';
 import OrderForm from '../components/orderForm';
 import OrderTable from '../components/orderTable';
 
 const OrderPage = () => {
-  const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]); 
   const [editingOrder, setEditingOrder] = useState(null);
   const toast = useToast();
 
@@ -16,7 +16,7 @@ const OrderPage = () => {
   const fetchOrders = async () => {
     try {
       const response = await getOrders();
-      setOrders(response.data);
+      setFilteredOrders(response.data);
     } catch (error) {
       console.error('Error fetching orders:', error);
     }
@@ -55,19 +55,39 @@ const OrderPage = () => {
     }
   };
 
+  const handleSortProduct = (order) => {
+    let sorted = [...filteredOrders];
+    if (order === 'asc') {
+      sorted.sort((a, b) => a.product.localeCompare(b.product));
+    } else if (order === 'desc') {
+      sorted.sort((a, b) => b.product.localeCompare(a.product));
+    }
+    setFilteredOrders(sorted);
+  };
+
   return (
     <Box p={5}>
       <Heading mb={5}>Order - Data Pesanan</Heading>
-      
-      <OrderForm
-        onAdd={handleAddOrder}
-        onUpdate={handleUpdateOrder}
-        editingOrder={editingOrder}
-        clearEdit={() => setEditingOrder(null)}
-      />
-      
+
+      <HStack justifyContent="space-between" mb={5}>
+        <OrderForm
+          onAdd={handleAddOrder}
+          onUpdate={handleUpdateOrder}
+          editingOrder={editingOrder}
+          clearEdit={() => setEditingOrder(null)}
+        />
+        <Select
+          placeholder="Filter Nama Produk"
+          maxW="200px"
+          onChange={(e) => handleSortProduct(e.target.value)}
+        >
+          <option value="asc">A - Z Produk</option>
+          <option value="desc">Z - A Produk</option>
+        </Select>
+      </HStack>
+
       <OrderTable
-        orders={orders}
+        orders={filteredOrders}
         onEdit={setEditingOrder}
         onDelete={handleDeleteOrder}
       />
