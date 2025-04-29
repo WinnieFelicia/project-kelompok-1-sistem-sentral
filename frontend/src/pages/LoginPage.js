@@ -36,10 +36,10 @@ export default function LoginPage() {
     }
     try {
       const { data } = await login(form);
-      // Simpan token & username
+
       localStorage.setItem('token', data.token);
       localStorage.setItem('username', form.username);
-      // Set default auth header
+
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
 
       toast({
@@ -49,7 +49,6 @@ export default function LoginPage() {
         isClosable: true,
       });
 
-      // ➡️ Ubah tujuan setelah login ke /dashboard
       navigate('/dashboard');
     } catch (err) {
       toast({

@@ -1,118 +1,108 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Heading, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { getInventories } from '../services/inventoryService';
+import {
+  Box,
+  Button,
+  Heading,
+  Spinner,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Flex,
+  Text,
+} from '@chakra-ui/react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 
-export default function DashboardPage() {
+const DashboardInventory = () => {
   const [inventories, setInventories] = useState([]);
-  const [suppliers, setSuppliers] = useState([]);
-  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const loadInventories = async () => {
     try {
-      const [inventoryRes, supplierRes, orderRes] = await Promise.all([
-        axios.get('/api/inventory'),
-        axios.get('/api/supplier'),
-        axios.get('/api/order'),
-      ]);
-
-      // Menambahkan log untuk memeriksa data yang diterima
-      console.log('Inventory:', inventoryRes.data);
-      console.log('Supplier:', supplierRes.data);
-      console.log('Order:', orderRes.data);
-
-      setInventories(inventoryRes.data);
-      setSuppliers(supplierRes.data);
-      setOrders(orderRes.data);
+      setLoading(true);
+      const data = await getInventories();
+      setInventories(data);
     } catch (error) {
-      console.error('Failed to fetch dashboard data:', error);
+      console.error('Gagal load data inventory:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    loadInventories();
+  }, []);
+
+  if (loading) {
+    return (
+      <Flex justify="center" align="center" minHeight="70vh">
+        <Spinner size="xl" />
+      </Flex>
+    );
+  }
+
   return (
-    <Box>
-      <Heading mb={6}>Dashboard Sistem Sentral</Heading>
+    <Box p={6}>
+      <Flex justify="space-between" align="center" mb={6}>
+        <Heading size="lg">Dashboard Stok Produk</Heading>
+        <Button onClick={loadInventories} colorScheme="blue">
+          🔄 Refresh Data
+        </Button>
+      </Flex>
 
-      <Heading size="md" mt={8} mb={4}>Data Inventory</Heading>
-      <Table variant="simple" bg="gray.50" borderRadius="md">
-        <Thead>
-          <Tr>
-            <Th>Kode Produk</Th>
-            <Th>Nama Produk</Th>
-            <Th>Kategori</Th>
-            <Th>Harga/Pcs</Th>
-            <Th>Stok</Th>
-            <Th>Minumum Stok</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-        {inventories.map((item) => (
-          <Tr key={item._id}>
-            <Td>{item.kodeProduk}</Td>
-            <Td>{item.namaProduk}</Td>
-            <Td>{item.kategori}</Td>
-            <Td>Rp {item.harga.toLocaleString()}</Td>
-            <Td>{item.stok}</Td>
-            <Td>{item.batasMinimumStok}</Td>
+      <Heading size="md" mb={4}>Tabel Stok Produk</Heading>
+      <TableContainer mb={8}>
+        <Table variant="simple" size="md">
+          <Thead bg="gray.100">
+            <Tr>
+              <Th>Kode Produk</Th>
+              <Th>Nama Produk</Th>
+              <Th>Kategori</Th>
+              <Th isNumeric>Harga</Th>
+              <Th isNumeric>Stok</Th>
+              <Th isNumeric>Batas Minimum Stok</Th>
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
+          </Thead>
+          <Tbody>
+            {inventories.map((item) => {
+              const isLowStock = item.stok <= item.batasMinimumStok;
+              return (
+                <Tr key={item._id}>
+                  <Td>{item.kodeProduk}</Td>
+                  <Td>{item.namaProduk}</Td>
+                  <Td>{item.kategori}</Td>
+                  <Td isNumeric>Rp{item.harga.toLocaleString()}</Td>
+                  <Td isNumeric>
+                    <Text color={isLowStock ? 'red.500' : 'black'}>
+                      {item.stok}
+                    </Text>
+                  </Td>
+                  <Td isNumeric>{item.batasMinimumStok}</Td>
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
 
-      <Heading size="md" mt={8} mb={4}>Data Supplier</Heading>
-      <Table variant="simple" bg="gray.50" borderRadius="md">
-        <Thead>
-          <Tr>
-            <Th>ID Supplier</Th>
-            <Th>Nama Supplier</Th>
-            <Th>Nomor Kontak</Th>
-            <Th>Alamat</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-        {suppliers.map((supplier) => (
-          <Tr key={supplier._id}>
-            <Td>{supplier.supplierId}</Td>
-            <Td>{supplier.supplierName}</Td>
-            <Td>{supplier.contactNumber}</Td>
-            <Td>{supplier.address}</Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-
-      <Heading size="md" mt={8} mb={4}>Data Order</Heading>
-      <Table variant="simple" bg="gray.50" borderRadius="md">
-        <Thead>
-          <Tr>
-            <Th>ID Order</Th>
-            <Th>Tanggal</Th>
-            <Th>Supplier</Th>
-            <Th>Produk</Th>
-            <Th>Kuantitas</Th>
-            <Th>Harga</Th>
-            <Th>Total</Th>
-            <Th>Status Pembayaran</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-        {orders.map((order) => (
-          <Tr key={order._id}>
-            <Td>{order.orderID}</Td>
-            <Td>{order.date}</Td>
-            <Td>{order.supplier}</Td>
-            <Td>{order.product}</Td>
-            <Td>{order.quantity}</Td>
-            <Td>{order.price}</Td>
-            <Td>{order.total}</Td>
-            <Td>{order.payment}</Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+      <Heading size="md" mb={4}>Grafik Stok Produk</Heading>
+      <Box width="100%" height="400px">
+        <ResponsiveContainer>
+          <BarChart data={inventories}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="namaProduk" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="stok" fill="#3182CE" />
+          </BarChart>
+        </ResponsiveContainer>
+      </Box>
     </Box>
   );
-}
+};
+
+export default DashboardInventory;

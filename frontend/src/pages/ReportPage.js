@@ -21,16 +21,14 @@ export default function LaporanPage() {
   
   const downloadPDF = () => {
     const doc = new jsPDF({
-      orientation: 'landscape', // Biar tabel lebih lebar, opsional
+      orientation: 'landscape', 
       unit: 'pt',
       format: 'A4',
     });
   
-    // Judul Laporan
     doc.setFontSize(18);
     doc.text('Order Report', 40, 40);
   
-    // Isi tabel
     autoTable(doc, {
       startY: 60,
       head: [[
@@ -46,10 +44,10 @@ export default function LaporanPage() {
         order.total,
         order.payment,
       ]),
-      theme: 'striped', // Ada warna belang putih-abu, kelihatan rapi
+      theme: 'striped', 
       headStyles: {
-        fillColor: [32, 122, 183], // Biru untuk header
-        textColor: 255, // Putih
+        fillColor: [32, 122, 183], 
+        textColor: 255, 
         fontStyle: 'bold',
       },
       bodyStyles: {
@@ -62,7 +60,7 @@ export default function LaporanPage() {
         valign: 'middle',
       },
       didDrawPage: (data) => {
-        // Footer nomor halaman
+
         const pageSize = doc.internal.pageSize;
         const pageHeight = pageSize.height || pageSize.getHeight();
         doc.setFontSize(10);
@@ -70,7 +68,6 @@ export default function LaporanPage() {
       },
     });
   
-    // Save file
     doc.save('order-report.pdf');
   };
   

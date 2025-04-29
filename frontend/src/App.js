@@ -28,7 +28,6 @@ function AppLayout() {
   );
 }
 
-// Set axios default header if token exists (on page reload)
 const token = localStorage.getItem('token');
 if (token) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
@@ -39,12 +38,10 @@ export default function App() {
     <ChakraProvider theme={theme}>
       <Router>
         <Routes>
-          {/* Public */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/logout" element={<LogoutPage />} />
 
-          {/* Protected */}
           <Route
             path="/"
             element={
@@ -61,7 +58,6 @@ export default function App() {
             <Route path="laporan" element={<ReportPage />} /> 
           </Route>
 
-          {/* Fallback */}
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>

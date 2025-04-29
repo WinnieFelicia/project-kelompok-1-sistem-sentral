@@ -23,7 +23,6 @@ exports.deleteOrder = async (req, res) => {
   res.json({ message: 'Order deleted' });
 };
 
-// 🚀 Tambahan baru untuk laporan berdasarkan tanggal
 exports.getReport = async (req, res) => {
   try {
     const { start, end } = req.query;
